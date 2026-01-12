@@ -1,0 +1,12 @@
+pandas
+scikit-surprise
+optuna
+mlflow
+numpy<2
+faiss-cpu
+fastapi
+uvicorn[standard]
+requests
+sqlmodel
+python-jose[cryptography]
+passlib[bcrypt]
