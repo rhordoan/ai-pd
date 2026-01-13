@@ -27,7 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent
 MODEL_PATH = BASE_DIR / "best_model.pkl"
 INDEX_PATH = BASE_DIR / "song_vectors.index"
 MAP_PATH = BASE_DIR / "faiss_id_map.pkl"
-DB_PATH = BASE_DIR / "users.db"
+SQLITE_PATH = os.getenv("SQLITE_PATH")
+DB_PATH = Path(SQLITE_PATH) if SQLITE_PATH else (BASE_DIR / "data" / "users.db")
+DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 SECRET_KEY = os.getenv("API_SECRET_KEY", "dev-secret-change-me")
 ALGORITHM = "HS256"
@@ -210,7 +212,7 @@ class Recommender:
 
     def _norm_text(self, s: str) -> str:
         s = unicodedata.normalize("NFKD", s)
-        s = s.replace("’", "'")
+        s = s.replace("???", "'")
         s = s.lower().strip()
         s = re.sub(r"\s+", " ", s)
         return s

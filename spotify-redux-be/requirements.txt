@@ -5,8 +5,10 @@ mlflow
 numpy<2
 faiss-cpu
 fastapi
+python-multipart
 uvicorn[standard]
 requests
 sqlmodel
 python-jose[cryptography]
 passlib[bcrypt]
+
