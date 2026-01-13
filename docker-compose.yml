@@ -1,0 +1,54 @@
+services:
+  backend:
+    build:
+      context: ./spotify-redux-be
+    ports:
+      - "8000:8000"
+    environment:
+      - API_SECRET_KEY=${API_SECRET_KEY:-dev-secret-change-me}
+      - TOKEN_EXPIRE_HOURS=${TOKEN_EXPIRE_HOURS:-24}
+      - LIKED_WEIGHT=${LIKED_WEIGHT:-2.0}
+      - DATABASE_URL=${DATABASE_URL:-}
+    volumes:
+      # Hot reload in dev
+      - ./spotify-redux-be:/app
+      # Persist SQLite db in dev
+      - be-db:/app/users.db
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./spotify-redux-fe
+    environment:
+      # For Expo web in container, calling backend via docker network name works
+      - EXPO_PUBLIC_API_BASE=${EXPO_PUBLIC_API_BASE:-http://localhost:8000}
+    ports:
+      - "8081:8081"   # metro
+      - "19000:19000" # expo
+      - "19001:19001"
+      - "19002:19002"
+      - "19006:19006" # expo web
+    volumes:
+      - ./spotify-redux-fe:/app
+      - fe-node-modules:/app/node_modules
+    depends_on:
+      - backend
+
+  # Optional Postgres (recommended for production); enabled by default in dev-compose for convenience.
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-spotify}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-spotify}
+      - POSTGRES_DB=${POSTGRES_DB:-spotify}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+volumes:
+  pg-data:
+  be-db:
+  fe-node-modules:
+

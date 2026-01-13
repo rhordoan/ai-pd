@@ -1,0 +1,18 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.DS_Store
+
+# Large/local data you likely don’t want in the image
+Last.fm_data.csv
+mlflow.db
+users.db
+
+# Local artifacts can be mounted at runtime
+best_model.pkl
+song_vectors.index
+faiss_id_map.pkl
+

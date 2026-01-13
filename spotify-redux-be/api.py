@@ -39,9 +39,13 @@ DEEZER_SEARCH_URL = "https://api.deezer.com/search"
 MUSICBRAINZ_SEARCH_URL = "https://musicbrainz.org/ws/2/recording"
 COVER_ART_URL = "https://coverartarchive.org/release"
 
-db_engine = create_engine(
-    f"sqlite:///{DB_PATH}", connect_args={"check_same_thread": False}
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+if DATABASE_URL:
+    # If using SQLite via env, keep check_same_thread disabled for FastAPI
+    connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+    db_engine = create_engine(DATABASE_URL, connect_args=connect_args)
+else:
+    db_engine = create_engine(f"sqlite:///{DB_PATH}", connect_args={"check_same_thread": False})
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 cover_cache: dict[str, Optional[str]] = {}
