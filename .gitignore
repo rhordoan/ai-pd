@@ -1,0 +1,20 @@
+# Global ignores
+.DS_Store
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Python / backend local state
+spotify-redux-be/users.db
+spotify-redux-be/mlflow.db
+spotify-redux-be/Last.fm_data.csv
+spotify-redux-be/__pycache__/
+
+# Node / frontend
+node_modules/
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+

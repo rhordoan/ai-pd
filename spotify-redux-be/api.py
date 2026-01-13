@@ -160,10 +160,21 @@ def get_user_likes(session: Session, user: Optional[User]) -> List[str]:
 
 
 def verify_password(plain: str, hashed: str) -> bool:
+    # bcrypt ignores everything after 72 bytes; reject overly long input explicitly
+    if len(plain.encode("utf-8")) > 72:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password too long for bcrypt (max 72 bytes)",
+        )
     return pwd_context.verify(plain, hashed)
 
 
 def hash_password(password: str) -> str:
+    if len(password.encode("utf-8")) > 72:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password too long for bcrypt (max 72 bytes)",
+        )
     return pwd_context.hash(password)
 
 
