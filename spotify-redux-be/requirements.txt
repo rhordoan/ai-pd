@@ -6,7 +6,9 @@ numpy<2
 faiss-cpu
 fastapi
 uvicorn[standard]
+python-multipart
 requests
 sqlmodel
 python-jose[cryptography]
 passlib[bcrypt]
+bcrypt==3.2.2
